@@ -21,20 +21,18 @@
 
 ## 🛠️ 自动化部署指南 (GitHub Actions 推荐)
 
-### 第一步：创建具备完整编辑权限的 Cloudflare API Token
+### 第一步：创建 Cloudflare API Token
 
 登录 [Cloudflare 控制台 API 令牌页面](https://dash.cloudflare.com/profile/api-tokens)：
 
-1. 点击 **创建令牌 (Create Token)**。
-2. 找到 **编辑 Cloudflare Workers (Edit Cloudflare Workers)** 模板，点击右侧的 **使用模板 (Use template)**。
-3. 在 **权限 (Permissions)** 列表中，确保包含以下 5 项具体权限（如果没有请点击 *+ 添加更多*）：
-   - **账户 (Account)** | **Workers 脚本 (Workers Scripts)** | **编辑 (Edit)**
-   - **账户 (Account)** | **Workers KV 存储 (Workers KV Storage)** | **编辑 (Edit)**
-   - **账户 (Account)** | **D1** | **编辑 (Edit)**
-   - **账户 (Account)** | **账户细节 (Account Details)** | **读取 (Read)**
-   - **用户 (User)** | **用户细节 (User Details)** | **读取 (Read)**
-4. 在 **账户资源 (Account Resources)** 中选择 包括 (Include) -> 所有账户 (All accounts)（或选择你具体的账户名）。
-5. 点击 **继续以预览 (Continue to summary)** -> **创建令牌 (Create Token)** 并复制生成的 Token 字符串。
+1. 点击 **创建令牌 (Create Token)** -> 拉到最底部点击 **创建自定义令牌 (Create Custom Token)**。
+2. 填入令牌名称（例如 cf-sub2api）。
+3. 在 **权限 (Permissions)** 中依次添加以下 3 项权限：
+   - **帐户** | **Workers 脚本** | **编辑**
+   - **帐户** | **Workers KV 存储** | **编辑**
+   - **帐户** | **D1** | **编辑**
+4. 在 **帐户资源 (Account Resources)** 中选择 包括 -> 所有帐户。
+5. 点击 **继续以预览** -> **创建令牌** 并复制生成的 Token 字符串。
 
 ---
 
@@ -46,7 +44,7 @@
 
 | Secret 名称 | 填写内容 / 说明 |
 | :--- | :--- |
-| CLOUDFLARE_API_TOKEN | 刚才第一步创建并复制的 Cloudflare API Token |
+| CLOUDFLARE_API_TOKEN | 第一步创建并复制的 Cloudflare API Token |
 | CLOUDFLARE_ACCOUNT_ID | Cloudflare 控制台首页右侧面板展示的 **Account ID（账户 ID）** |
 
 ---
