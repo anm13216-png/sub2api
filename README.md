@@ -21,21 +21,42 @@
 
 ## 🛠️ 自动化部署指南 (GitHub Actions 推荐)
 
-### 第一步：在 GitHub 仓库添加 Secrets
+### 第一步：创建具备完整编辑权限的 Cloudflare API Token
+
+登录 [Cloudflare 控制台 API 令牌页面](https://dash.cloudflare.com/profile/api-tokens)：
+
+1. 点击 **创建令牌 (Create Token)**。
+2. 找到 **编辑 Cloudflare Workers (Edit Cloudflare Workers)** 模板，点击右侧的 **使用模板 (Use template)**。
+3. 在 **权限 (Permissions)** 列表中，确保包含以下 5 项具体权限（如果没有请点击 *+ 添加更多*）：
+   - **账户 (Account)** | **Workers 脚本 (Workers Scripts)** | **编辑 (Edit)**
+   - **账户 (Account)** | **Workers KV 存储 (Workers KV Storage)** | **编辑 (Edit)**
+   - **账户 (Account)** | **D1** | **编辑 (Edit)**
+   - **账户 (Account)** | **账户细节 (Account Details)** | **读取 (Read)**
+   - **用户 (User)** | **用户细节 (User Details)** | **读取 (Read)**
+4. 在 **账户资源 (Account Resources)** 中选择 包括 (Include) -> 所有账户 (All accounts)（或选择你具体的账户名）。
+5. 点击 **继续以预览 (Continue to summary)** -> **创建令牌 (Create Token)** 并复制生成的 Token 字符串。
+
+---
+
+### 第二步：在 GitHub 仓库配置 Secrets
 
 进入你的 GitHub 仓库 https://github.com/axzcnzxis/sub2api：
-1. 点击 **Settings** -> **Secrets and variables** -> **Actions**
+1. 点击 **Settings** -> **Secrets and variables** -> **Actions**。
 2. 点击 **New repository secret** 添加以下两项：
 
-- CLOUDFLARE_API_TOKEN：你的 Cloudflare API 令牌（需具备 Workers 编辑权限）
-- CLOUDFLARE_ACCOUNT_ID：你的 Cloudflare 账户 ID
+| Secret 名称 | 填写内容 / 说明 |
+| :--- | :--- |
+| CLOUDFLARE_API_TOKEN | 刚才第一步创建并复制的 Cloudflare API Token |
+| CLOUDFLARE_ACCOUNT_ID | Cloudflare 控制台首页右侧面板展示的 **Account ID（账户 ID）** |
 
-### 第二步：一键 Run Workflow
+---
 
-1. 点击 GitHub 仓库顶部的 **Actions** 选项卡。
-2. 在左侧选择 **Deploy Cloudflare Worker**。
-3. 点击右侧 **Run workflow** -> 选择 main 分支 -> 点击 **Run workflow**。
-4. 系统将在云端自动完成打包与部署！
+### 第三步：一键 Run Workflow 全自动部署
+
+1. 打开 GitHub 仓库顶部的 **Actions** 选项卡。
+2. 在左侧菜单点击 **Deploy Cloudflare Worker**。
+3. 点击右侧 **Run workflow** -> 选择 main 分支 -> 点击绿色 **Run workflow** 按钮。
+4. 系统将在 GitHub Actions 云端全自动完成依赖安装、Worker 脚本打包并部署至你的 Cloudflare 账户！
 
 ---
 
