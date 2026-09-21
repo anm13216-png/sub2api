@@ -4,8 +4,8 @@
 [![Version: v0.1.0.10](https://img.shields.io/badge/version-v0.1.0.10-orange.svg)](https://github.com/axzcnzxis/sub2api)
 [![License: LGPL v3](https://img.shields.io/badge/License-LGPL_v3-blue.svg)](LICENSE)
 
-> **当前版本**：0.1.0.10（测试版）  
-> **版本命名规范**：测试版前缀为 （例如：0.1.0.10），正式版前缀为 r（例如：r1.0.0）。
+> **当前版本**：v0.1.0.10（测试版）  
+> **版本命名规范**：测试版前缀为 v（例如：v0.1.0.10），正式版前缀为 vr（例如：vr1.0.0）。
 
 **Sub2API (Cloudflare Native)** 是基于 Cloudflare Serverless 全家桶重构的开源 AI API 网关与订阅配额调度平台。
 
