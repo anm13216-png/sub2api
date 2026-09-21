@@ -1,11 +1,23 @@
 # Sub2API (Cloudflare Native Serverless Edition)
 
 [![Deploy to Cloudflare Worker](https://github.com/axzcnzxis/sub2api/actions/workflows/deploy-cloudflare.yml/badge.svg)](https://github.com/axzcnzxis/sub2api/actions/workflows/deploy-cloudflare.yml)
+[![Version: v0.1.0.10](https://img.shields.io/badge/version-v0.1.0.10-orange.svg)](https://github.com/axzcnzxis/sub2api)
 [![License: LGPL v3](https://img.shields.io/badge/License-LGPL_v3-blue.svg)](LICENSE)
+
+> **当前版本**：0.1.0.10（测试版）  
+> **版本命名规范**：测试版前缀为 （例如：0.1.0.10），正式版前缀为 r（例如：r1.0.0）。
 
 **Sub2API (Cloudflare Native)** 是基于 Cloudflare Serverless 全家桶重构的开源 AI API 网关与订阅配额调度平台。
 
 零服务器成本（100% Free Tier 可运行），支持将 Claude Pro/Team、OpenAI ChatGPT、Gemini、Grok 等订阅账号转为标准 OpenAI / Anthropic 兼容 API 接口，并自动调度与负载均衡。
+
+---
+
+## 📌 项目维护与更新源说明
+
+本项目为全新的 Cloudflare Serverless 架构分支，**所有后续版本更新与代码拉取均来自本项目仓库**：
+- **官方仓库**: [https://github.com/axzcnzxis/sub2api](https://github.com/axzcnzxis/sub2api)
+- 请务必从 xzcnzxis/sub2api 拉取最新更新，勿直接混用上游原版 Docker/Go 仓库。
 
 ---
 
@@ -38,7 +50,7 @@
 
 ### 第二步：在 GitHub 仓库配置 Secrets
 
-进入你的 GitHub 仓库 https://github.com/axzcnzxis/sub2api：
+进入你的 GitHub 仓库 [https://github.com/axzcnzxis/sub2api](https://github.com/axzcnzxis/sub2api)：
 1. 点击 **Settings** -> **Secrets and variables** -> **Actions**。
 2. 点击 **New repository secret** 添加以下两项：
 
@@ -55,6 +67,16 @@
 2. 在左侧菜单点击 **Deploy Cloudflare Worker**。
 3. 点击右侧 **Run workflow** -> 选择 main 分支 -> 点击绿色 **Run workflow** 按钮。
 4. 系统将在 GitHub Actions 云端全自动完成依赖安装、Worker 脚本打包并部署至你的 Cloudflare 账户！
+
+---
+
+## 🔧 常见部署问题修复说明
+
+### 依赖冲突问题 (npm peer-dependency ERESOLVE)
+
+如在 GitHub Actions 构建日志中遇到 @cloudflare/workers-types 与 wrangler 的同级依赖冲突报错（xit code 1），本项目已采用**标准依赖规范方案**完成根治：
+- worker/package.json 中的 @cloudflare/workers-types 锁定为与 wrangler@^3.90.0 兼容的 ^4.20241106.0 版本。
+- 无需开启 --legacy-peer-deps 即可顺利完成打包与发布。
 
 ---
 
