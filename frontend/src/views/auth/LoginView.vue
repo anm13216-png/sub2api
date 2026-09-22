@@ -24,7 +24,7 @@
             <input
               id="email"
               v-model="formData.email"
-              type="email"
+              type="text"
               required
               autofocus
               autocomplete="email"
