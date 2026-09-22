@@ -43,6 +43,9 @@
    - **帐户** | **Workers 脚本** | **编辑**
    - **帐户** | **Workers KV 存储** | **编辑**
    - **帐户** | **D1** | **编辑**
+   - 账户 (Account) | Cloudflare Pages | 编辑 (Edit)
+   - 用户 (User) | 用户详细信息 (User Details) | 读取 (Read)
+   - 用户 (User) | 成员身份 (Memberships) | 读取 (Read)
 4. 在 **帐户资源 (Account Resources)** 中选择 包括 -> 所有帐户。
 5. 点击 **继续以预览** -> **创建令牌** 并复制生成的 Token 字符串。
 
