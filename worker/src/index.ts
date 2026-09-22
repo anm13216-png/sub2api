@@ -6,16 +6,23 @@ import { Env } from "./types";
 
 const app = new Hono<{ Bindings: Env }>();
 
+// 开启全局 CORS，支持 OPTIONS 预检请求与所有 Headers
 app.use("*", cors({
-  origin: "*",
-  allowHeaders: ["Content-Type", "Authorization", "x-api-key"],
+  origin: (origin) => origin || "*",
+  allowHeaders: ["Content-Type", "Authorization", "x-api-key", "X-Admin-UI-Request", "X-User-UI-Request", "Accept-Language"],
   allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  exposeHeaders: ["Content-Length"],
+  maxAge: 86400,
+  credentials: true,
 }));
+
+// 处理所有 OPTIONS 预检请求
+app.options("*", (c) => c.text("OK", 200));
 
 // 健康检查
 app.get("/", (c) => c.text("Sub2API Cloudflare Worker Gateway is Running!"));
 
-// API 路由挂载 (兼容前端各种 /api/v1/auth 和 /v1/auth)
+// API 路由挂载
 app.route("/api/v1/auth", auth);
 app.route("/v1/auth", auth);
 app.route("/auth", auth);

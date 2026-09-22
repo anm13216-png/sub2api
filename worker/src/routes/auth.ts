@@ -65,9 +65,13 @@ auth.post("/login", async (c) => {
   await c.env.CACHE_KV.put("token:" + token, JSON.stringify({ userId: user.id, role: user.role, username: user.username }));
 
   return c.json({
-    access_token: token,
-    token_type: "Bearer",
-    user: { id: user.id, username: user.username, role: user.role }
+    code: 0,
+    message: "登录成功",
+    data: {
+      access_token: token,
+      token_type: "Bearer",
+      user: { id: user.id, username: user.username, role: user.role }
+    }
   });
 });
 
