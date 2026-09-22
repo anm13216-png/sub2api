@@ -40,6 +40,7 @@ async function ensureDefaultAdmin(env: Env) {
 
 // 登录接口
 auth.post("/login", async (c) => {
+  try {
   await ensureDefaultAdmin(c.env);
 
   const body = await c.req.json().catch(() => ({}));
@@ -104,6 +105,11 @@ auth.put("/change-password", async (c) => {
   await db.update(users).set({ passwordHash: newHash }).where(eq(users.id, session.userId)).run();
 
   return c.json({ message: "密码修改成功" });
+});
+
+  } catch (err: any) {
+    return c.json({ error: { message: err.message || "Internal Server Error", type: "server_error" } }, 500);
+  }
 });
 
 export default auth;

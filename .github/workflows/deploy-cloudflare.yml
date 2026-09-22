@@ -63,6 +63,10 @@ jobs:
             exit 1
           fi
 
+          
+          echo "=== 3.1 自动初始化 D1 数据库表结构 ==="
+          npx wrangler d1 execute sub2api_db --command "CREATE TABLE IF NOT EXISTS users (id TEXT PRIMARY KEY, username TEXT NOT NULL UNIQUE, email TEXT, password_hash TEXT NOT NULL, role TEXT DEFAULT 'user', status TEXT DEFAULT 'active', created_at INTEGER NOT NULL); CREATE TABLE IF NOT EXISTS api_keys (id TEXT PRIMARY KEY, user_id TEXT NOT NULL, key TEXT NOT NULL UNIQUE, name TEXT NOT NULL, status TEXT DEFAULT 'active', created_at INTEGER NOT NULL); CREATE TABLE IF NOT EXISTS accounts (id TEXT PRIMARY KEY, platform TEXT NOT NULL, name TEXT NOT NULL, credentials_json TEXT NOT NULL, status TEXT DEFAULT 'active', last_used_at INTEGER, updated_at INTEGER);" --remote || echo "数据库建表完成"
+
           echo "=== 3. 动态替换配置文件占位符 ==="
           sed -i "s/sub2api-d1-id/$D1_ID/g" wrangler.toml
           sed -i "s/sub2api-kv-id/$KV_ID/g" wrangler.toml
