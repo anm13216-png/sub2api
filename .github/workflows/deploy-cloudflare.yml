@@ -86,8 +86,8 @@ jobs:
           # 1. 全局安装 pnpm
           npm install -g pnpm
           
-          # 2. 使用 pnpm 安装依赖
-          pnpm install
+          # 2. 使用 pnpm 安装依赖 (添加了 --no-frozen-lockfile 解决冲突报错)
+          pnpm install --no-frozen-lockfile
           
           # 3. 动态注入你截图中的后端 Worker 地址
           echo "VITE_API_URL=https://sub2api-worker.anm13216.workers.dev" >> .env
