@@ -6,7 +6,11 @@ import { Env } from "../types";
 
 const auth = new Hono<{ Bindings: Env }>();
 
-// 辅助 SHA-256 哈希函数
+// 默认固定的管理员账号密码
+const DEFAULT_ADMIN_EMAIL = "admin@sub2api.local";
+const DEFAULT_ADMIN_PASSWORD = "password";
+
+// SHA-256 哈希辅助函数
 async function hashPassword(password: string): Promise<string> {
   const encoder = new TextEncoder();
   const data = encoder.encode(password);
@@ -15,8 +19,29 @@ async function hashPassword(password: string): Promise<string> {
   return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
 }
 
-// 任意账号/密码首次登入自动设为管理员
+// 确保默认管理员账号存在
+async function ensureDefaultAdmin(env: Env) {
+  const db = drizzle(env.DB);
+  const existingAdmins = await db.select().from(users).where(eq(users.role, "admin")).limit(1);
+
+  if (existingAdmins.length === 0) {
+    const passHash = await hashPassword(DEFAULT_ADMIN_PASSWORD);
+    await db.insert(users).values({
+      id: crypto.randomUUID(),
+      username: DEFAULT_ADMIN_EMAIL,
+      email: DEFAULT_ADMIN_EMAIL,
+      passwordHash: passHash,
+      role: "admin",
+      status: "active",
+      createdAt: new Date(),
+    }).run();
+  }
+}
+
+// 登录接口
 auth.post("/login", async (c) => {
+  await ensureDefaultAdmin(c.env);
+
   const body = await c.req.json().catch(() => ({}));
   const account = body.email || body.username || body.account;
   const password = body.password;
@@ -26,38 +51,9 @@ auth.post("/login", async (c) => {
   }
 
   const db = drizzle(c.env.DB);
-  
-  // 1. 检查数据库中是否存在管理员账号
-  const existingAdmins = await db.select().from(users).where(eq(users.role, "admin")).limit(1);
   const passHash = await hashPassword(password);
 
-  if (existingAdmins.length === 0) {
-    // 首次登入：自动将当前输入的任意账号和密码注册并设定为管理员
-    const newAdminId = crypto.randomUUID();
-    const now = new Date();
-
-    await db.insert(users).values({
-      id: newAdminId,
-      username: account,
-      email: account,
-      passwordHash: passHash,
-      role: "admin",
-      status: "active",
-      createdAt: now,
-    }).run();
-
-    const token = "sk-admin-" + crypto.randomUUID();
-    await c.env.CACHE_KV.put("token:" + token, JSON.stringify({ userId: newAdminId, role: "admin", username: account }));
-
-    return c.json({
-      access_token: token,
-      token_type: "Bearer",
-      user: { id: newAdminId, username: account, role: "admin" },
-      message: "首次登录成功，已自动将此账号密码初始化为管理员"
-    });
-  }
-
-  // 2. 非首次登录：正常校验账号与密码
+  // 查询用户
   const foundUsers = await db.select().from(users).where(eq(users.username, account)).limit(1);
   const user = foundUsers[0];
 
