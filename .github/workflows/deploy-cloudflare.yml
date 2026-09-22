@@ -109,5 +109,5 @@ jobs:
           npx wrangler pages project create "sub2api-web" --production-branch="main" || true
           
           echo "正在自动部署前端到 Cloudflare Pages..."
-          # 使用 wrangler 将 frontend/dist 目录一键发布到 sub2api-web 项目中
-          npx wrangler pages deploy dist --project-name="sub2api-web"
+          # 指向实际的打包输出路径
+          npx wrangler pages deploy ../backend/internal/web/dist --project-name="sub2api-web"
