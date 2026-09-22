@@ -104,7 +104,10 @@ jobs:
         run: |
           cd frontend
           
+          echo "=== 检查或创建 Cloudflare Pages 项目 ==="
+          # 如果项目不存在，提前创建。如果存在，则忽略报错继续执行
+          npx wrangler pages project create "sub2api-web" --production-branch="main" || true
+          
           echo "正在自动部署前端到 Cloudflare Pages..."
-          # 使用 wrangler 将 frontend/dist 目录一键发布。
-          # 项目名设为 sub2api-web，如果没有会自动创建。
+          # 使用 wrangler 将 frontend/dist 目录一键发布到 sub2api-web 项目中
           npx wrangler pages deploy dist --project-name="sub2api-web"
