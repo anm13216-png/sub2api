@@ -13,7 +13,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22 # 已经修改为 22，以满足前端包的要求
+          node-version: 22
 
       # ==========================================
       # 第一阶段：配置并部署后端 Worker 和数据库
@@ -83,10 +83,10 @@ jobs:
         run: |
           cd frontend
           
-          # 1. 全局安装 pnpm
-          npm install -g pnpm
+          # 1. 全局安装 pnpm v9 版本，完美兼容该项目的配置
+          npm install -g pnpm@9
           
-          # 2. 使用 pnpm 安装依赖 (添加了 --no-frozen-lockfile 解决冲突报错)
+          # 2. 使用 pnpm 安装依赖
           pnpm install --no-frozen-lockfile
           
           # 3. 动态注入你截图中的后端 Worker 地址
